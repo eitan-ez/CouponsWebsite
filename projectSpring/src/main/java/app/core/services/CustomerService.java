@@ -1,6 +1,5 @@
 package app.core.services;
 
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import app.core.entities.Coupon;
 import app.core.entities.Customer;
-import app.core.exceptions.CouponSystemException;
 
 @Service("customerService")
 @Transactional
@@ -139,19 +137,9 @@ public class CustomerService extends ClientService {
     /**
      * @return all details about this customer from the database.
      */
-    public String getCustomerDetails() throws ServiceException {
+    public Customer getCustomerDetails() throws ServiceException {
 
-        Customer customer = getCustomer();
-
-        String details = "ID: " + id + "\n"
-                + "Full Name: " + customer.getFirstName() + " " + customer.getLastName() + "\n"
-                + "Email: " + customer.getEmail() + "\n"
-                + "Coupons purchased: ";
-
-        ArrayList<Coupon> coupons = getCoupons();
-        details += coupons.size();
-
-        return details;
+      return getCustomer();
     }
 
     /**

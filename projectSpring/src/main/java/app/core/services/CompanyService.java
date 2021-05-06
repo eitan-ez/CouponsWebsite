@@ -151,20 +151,12 @@ public class CompanyService extends ClientService {
 	/**
 	 * Gets all details about this company from the database.
 	 */
-	public String getCompanyDetails() throws ServiceException {
+	public Company getCompanyDetails() throws ServiceException {
 
 		Optional<Company> opt = comRep.findById(id);
 		if (opt.isEmpty())
 			throw new ServiceException("A company with this id does not exist. ");
-		Company company = opt.get();
-
-		String details = "ID: " + this.id + "\n" + "Name: " + company.getName() + "\n" + "Email: " + company.getEmail()
-				+ "\n" + "Coupons owned: ";
-
-		ArrayList<Coupon> coupons = (ArrayList<Coupon>) getCoupons();
-		details += coupons.size();
-
-		return details;
+		return opt.get();
 	}
 
 	/**
