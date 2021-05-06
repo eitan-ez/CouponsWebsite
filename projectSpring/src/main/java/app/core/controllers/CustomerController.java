@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,7 +25,7 @@ public class CustomerController extends ClientController {
     private CustomerService service;
 
     @PutMapping("/purchase-coupon")
-    public void purchaseCoupon(@RequestHeader String token, int couponId) {
+    public void purchaseCoupon(int couponId) {
     	try {
 			service.purchaseCoupon(couponId);
 		} catch (ServiceException e) {
@@ -35,22 +34,22 @@ public class CustomerController extends ClientController {
     }
     
     @GetMapping("/all-coupons")
-    public List<Coupon> getCoupons(@RequestHeader String token) {
+    public List<Coupon> getCoupons() {
     	return service.getCoupons();
     }
     
     @GetMapping("/coupons-by-category")
-    public List<Coupon> getCouponsByCategory (@RequestHeader String token, @RequestBody Category category){
+    public List<Coupon> getCouponsByCategory (@RequestBody Category category){
     	return service.getCouponsByCategory(category);
     }
     
     @GetMapping("/coupons-by-price")
-    public List<Coupon> getCouponsByMaxPrice (@RequestHeader String token, @RequestBody double maxPrice){
+    public List<Coupon> getCouponsByMaxPrice (@RequestBody double maxPrice){
     	return service.getCouponsByMaxPrice(maxPrice);
     }
     
     @GetMapping("/customer")
-    public Customer getCustomer(@RequestHeader String token) {
+    public Customer getCustomer() {
     	try {
 			return service.getCustomerDetails();
 		} catch (ServiceException e) {

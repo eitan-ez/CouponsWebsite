@@ -38,7 +38,7 @@ public class CompanyController extends ClientController {
 	}
 
 	@PutMapping("/update")
-	public Coupon updateCoupon(@RequestHeader String token, @RequestBody Coupon coupon, @RequestBody int id) {
+	public Coupon updateCoupon(@RequestBody Coupon coupon, @RequestBody int id) {
 		try {
 			return service.updateCoupon(coupon, id);
 		} catch (ServiceException e) { // in case of exception from our method
@@ -47,7 +47,7 @@ public class CompanyController extends ClientController {
 	}
 	
 	@DeleteMapping("/delete")
-	public void deleteCoupon (@RequestHeader String token, @RequestBody int couponId) {
+	public void deleteCoupon (@RequestBody int couponId) {
 		try {
 			service.deleteCoupon(couponId);
 		} catch (ServiceException e) {// in case of exception from our method 
@@ -56,22 +56,22 @@ public class CompanyController extends ClientController {
 	}
 	
 	@GetMapping("/get-coupons")
-	public List<Coupon> getCompanyCoupons (@RequestHeader String token) {
+	public List<Coupon> getCompanyCoupons () {
 		return service.getCoupons();
 	}
 
 	@GetMapping("/get-coupons-by-category")
-	public List<Coupon> getCouponsByCategory(@RequestHeader String token, @RequestBody Category category){
+	public List<Coupon> getCouponsByCategory(@RequestBody Category category){
 		return service.getCouponsByCategory(category);
 	}
 	
 	@GetMapping("/get-coupons-by-price")
-	public List<Coupon> getCouponsByCategory(@RequestHeader String token, @RequestBody double maxPrice){
+	public List<Coupon> getCouponsByCategory(@RequestBody double maxPrice){
 		return service.getCouponsByMaxPrice(maxPrice);
 	}
 	
 	@GetMapping("/company")
-	public Company getCompanyDetails (@RequestHeader String token) {
+	public Company getCompanyDetails () {
 		try {
 			return this.service.getCompanyDetails();
 		} catch (ServiceException e) {
