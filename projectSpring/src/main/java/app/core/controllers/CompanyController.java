@@ -70,7 +70,7 @@ public class CompanyController extends ClientController {
 		return service.getCouponsByMaxPrice(maxPrice);
 	}
 	
-	@GetMapping("company")
+	@GetMapping("/company")
 	public Company getCompanyDetails (@RequestHeader String token) {
 		try {
 			return this.service.getCompanyDetails();

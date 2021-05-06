@@ -34,22 +34,22 @@ public class CustomerController extends ClientController {
 		}
     }
     
-    @GetMapping("all-coupons")
+    @GetMapping("/all-coupons")
     public List<Coupon> getCoupons(@RequestHeader String token) {
     	return service.getCoupons();
     }
     
-    @GetMapping("coupons-by-category")
+    @GetMapping("/coupons-by-category")
     public List<Coupon> getCouponsByCategory (@RequestHeader String token, @RequestBody Category category){
     	return service.getCouponsByCategory(category);
     }
     
-    @GetMapping("coupons-by-price")
+    @GetMapping("/coupons-by-price")
     public List<Coupon> getCouponsByMaxPrice (@RequestHeader String token, @RequestBody double maxPrice){
     	return service.getCouponsByMaxPrice(maxPrice);
     }
     
-    @GetMapping("customer")
+    @GetMapping("/customer")
     public Customer getCustomer(@RequestHeader String token) {
     	try {
 			return service.getCustomerDetails();
