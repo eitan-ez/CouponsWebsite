@@ -17,11 +17,10 @@ import org.springframework.stereotype.Service;
 public class LoginManager {
 
 //	TODO -- Remove @Autowired from CompanyService and CustomerService and only initialize them when logging in.
+
     @Autowired
     private AdminService adminService;
-    @Autowired
     private CompanyService companyService;
-    @Autowired
     private CustomerService customerService;
 
     /**
@@ -37,7 +36,7 @@ public class LoginManager {
         switch (clientType) {
 
             case Administrator:
-                service = new AdminService();
+                service = adminService;
                 break;
             case Company:
                 service = new CompanyService();
@@ -55,4 +54,15 @@ public class LoginManager {
             throw new LoginException("Failed to log in, the email or password you entered is incorrect. ");
 
     }
+
+//    @Autowired
+//    public void initCompanyService(CompanyService companyService) {
+//        this.companyService = companyService;
+//    }
+//
+//    @Autowired
+//    public void initCustomerService(CustomerService customerService) {
+//        this.customerService = customerService;
+//    }
+//
 }
