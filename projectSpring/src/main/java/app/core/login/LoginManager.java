@@ -16,18 +16,18 @@ import org.springframework.stereotype.Service;
 @Scope("singleton")
 public class LoginManager {
 
-    @Autowired
-    private AdminService adminService;
-    @Autowired
-    private CompanyService companyService;
-    @Autowired
-    private CustomerService customerService;
+//	TODO
+//    @Autowired
+//    private AdminService adminService;
+//    @Autowired
+//    private CompanyService companyService;
+//    @Autowired
+//    private CustomerService customerService;
 
     /**
      * Empty Constructor
      */
     public LoginManager() {
-        System.out.println("LoginManager is up");
     }
 
     public ClientService login(String email, String password, ClientType clientType) throws LoginException {
@@ -37,13 +37,13 @@ public class LoginManager {
         switch (clientType) {
 
             case Administrator:
-                service = adminService;
+                service = new AdminService();
                 break;
             case Company:
-                service = companyService;
+                service = new CompanyService();
                 break;
             case Customer:
-                service = customerService;
+                service = new CustomerService();
                 break;
             default:
                 throw new LoginException("Failed to log in, client has to be administrator, company or customer.");

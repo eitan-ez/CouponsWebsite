@@ -23,8 +23,9 @@ public class ComapnyController {
 	@Autowired
 	private CompanyService comService;
 
-//	TODO
 	public boolean login(String email, String password) {
+		if (comService.login(email, password))
+			return true;
 		return false;
 	}
 
