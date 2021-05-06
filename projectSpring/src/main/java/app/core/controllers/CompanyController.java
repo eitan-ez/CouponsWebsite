@@ -16,16 +16,22 @@ import app.core.services.CompanyService;
 
 @RestController
 @RequestMapping("/api/company")
-public class CompanyController extends ClientController {
+public class CompanyController {
 
 	@Autowired
 	private CompanyService service;
+
 
 	
 	public CompanyController() {
 	}
 
-	
+    @GetMapping("/login")
+    public boolean login(String email, String password) {
+        if (service.login(email, password))
+            return true;
+        return false;
+    }
 	
 	@PostMapping("/add")
 //	TODO return type and Exception type

@@ -14,11 +14,18 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
-public class AdminController extends ClientController {
+public class AdminController  {
 
     @Autowired
     private AdminService service;
 
+    @GetMapping("/login")
+    public boolean login(String email, String password) {
+        if (service.login(email, password))
+            return true;
+        return false;
+    }
+    
     @PostMapping("/add-company")
     public void addCompany(@RequestBody Company company) {
         try {

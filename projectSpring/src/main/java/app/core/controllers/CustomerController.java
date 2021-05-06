@@ -19,11 +19,17 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/customer")
-public class CustomerController extends ClientController {
+public class CustomerController {
 
     @Autowired
     private CustomerService service;
 
+    @GetMapping("/login")
+    public boolean login(String email, String password) {
+        if (service.login(email, password))
+            return true;
+        return false;
+    }
     @PutMapping("/purchase-coupon")
     public void purchaseCoupon(int couponId) {
     	try {
