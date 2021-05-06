@@ -2,13 +2,7 @@ package app.core.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import app.core.entities.Company;
@@ -18,22 +12,16 @@ import app.core.services.CompanyService;
 
 @RestController
 @RequestMapping("/api/company")
-public class ComapnyController {
+public class CompanyController extends ClientController {
 
 	@Autowired
-	private CompanyService comService;
-
-	public boolean login(String email, String password) {
-		if (comService.login(email, password))
-			return true;
-		return false;
-	}
+	private CompanyService service;
 
 	@PostMapping("/add")
 //	TODO return type and Exception type
 	public void addCoupon(@RequestBody Coupon coupon) {
 		try {
-			comService.addNewCoupon(coupon);
+			service.addNewCoupon(coupon);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
@@ -42,7 +30,7 @@ public class ComapnyController {
 	@PutMapping("/update")
 	public Coupon updateCoupon(@RequestBody Coupon coupon, @RequestBody int id) {
 		try {
-			return comService.updateCoupon(coupon, id);
+			return service.updateCoupon(coupon, id);
 		} catch (ServiceException e) { // in case of exception from our method
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		} catch (Exception e) { //in case of any other exeption
@@ -50,10 +38,10 @@ public class ComapnyController {
 		}
 	}
 	
-	@DeleteMapping("delete")
+	@DeleteMapping("/delete")
 	public void deleteCoupon (@RequestParam int couponId) {
 		try {
-			comService.deleteCoupon(couponId);
+			service.deleteCoupon(couponId);
 			
 		} catch (ServiceException e) {// in case of exception from our method 
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

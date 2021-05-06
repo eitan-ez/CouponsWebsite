@@ -18,6 +18,8 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
 
     void deleteByCompany(Company company);
 
+    // TODO -- Remove native query as much as possible
+
     @Query(value = "SELECT `coupon_id` FROM `customers_coupons` WHERE `customer_id` = :customerId", nativeQuery = true)
     List<Integer> findAllByCustomers(int customerId);
 

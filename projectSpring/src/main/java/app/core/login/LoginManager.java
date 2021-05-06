@@ -16,13 +16,13 @@ import org.springframework.stereotype.Service;
 @Scope("singleton")
 public class LoginManager {
 
-//	TODO
-//    @Autowired
-//    private AdminService adminService;
-//    @Autowired
-//    private CompanyService companyService;
-//    @Autowired
-//    private CustomerService customerService;
+//	TODO -- Remove @Autowired from CompanyService and CustomerService and only initialize them when logging in.
+    @Autowired
+    private AdminService adminService;
+    @Autowired
+    private CompanyService companyService;
+    @Autowired
+    private CustomerService customerService;
 
     /**
      * Empty Constructor
