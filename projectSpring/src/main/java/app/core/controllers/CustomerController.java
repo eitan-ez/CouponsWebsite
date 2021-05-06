@@ -39,7 +39,7 @@ public class CustomerController extends ClientController {
     	return service.getCoupons();
     }
     
-    @GetMapping("coupons-by-price")
+    @GetMapping("coupons-by-category")
     public List<Coupon> getCouponsByCategory (@RequestHeader String token, @RequestBody Category category){
     	return service.getCouponsByCategory(category);
     }
