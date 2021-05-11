@@ -23,13 +23,13 @@ public class AdminController {
 	@Autowired
 	private AdminService service;
 	@Autowired
-	private JwtGenerate JwtUtil;
+	private JwtGenerate jwtUtil;
 
 	@GetMapping("/login")
 	public String login(String email, String password) {
 		if (service.login(email, password)) {
 			UserDetails userDetails = new UserDetails("0", email, password, UserType.ADMIN);
-			return JwtUtil.generateToken(userDetails);
+			return jwtUtil.generateToken(userDetails);
 		}
 
 //        	TODO
@@ -117,6 +117,7 @@ public class AdminController {
 	@GetMapping("/get-one-customer")
 	public Customer getOneCustomer(@RequestBody int customerId) {
 		try {
+			
 			return service.getOneCustomer(customerId);
 		} catch (ServiceException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -125,7 +126,7 @@ public class AdminController {
 
 	public boolean jwtValidation(String jwt) {
 		try {
-			JwtUtil.extractAllClaims(jwt);
+			jwtUtil.extractAllClaims(jwt);
 			return true;
 		} catch (ExpiredJwtException e) {
 			return false;

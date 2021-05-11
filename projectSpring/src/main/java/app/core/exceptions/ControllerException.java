@@ -2,7 +2,12 @@ package app.core.exceptions;
 
 public class ControllerException extends CouponSystemException {
 
-    public ControllerException() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public ControllerException() {
     }
 
     public ControllerException(String message) {

@@ -53,7 +53,7 @@ public class JwtGenerate {
 			return jwtParser.parseClaimsJws(token).getBody();
 		}
 
-		/** returns the JWT subject - in our case the id */
+		/** returns the JWT subject - the id */
 		public String extractID(String token) {
 			return extractAllClaims(token).getSubject();
 		}
