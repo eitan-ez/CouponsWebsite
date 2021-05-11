@@ -48,8 +48,8 @@ public class CompanyService extends ClientService {
 	/**
 	 * Updates the coupon from the database.
 	 * 
-	 * @param Coupon coupon
-	 * @param int    id
+	 * @param coupon
+	 * @param couponId
 	 * @return
 	 * @throws ServiceException
 	 */

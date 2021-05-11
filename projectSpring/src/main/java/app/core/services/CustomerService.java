@@ -18,26 +18,10 @@ import app.core.entities.Customer;
 @Scope("prototype")
 public class CustomerService extends ClientService {
 
-    private int id;
-
     /**
      * An empty constructor.
      */
     public CustomerService() {
-    }
-
-    /**
-     * Init Constructor
-     */
-    public CustomerService(int id) {
-        this.id = id;
-    }
-
-    /**
-     * Sets the company's id.
-     */
-    public void setId(int id) {
-        this.id = id;
     }
 
     /**
@@ -46,17 +30,16 @@ public class CustomerService extends ClientService {
     @Override
     public boolean login(String email, String password) {
 
-        if (custRep.existsCustomerByEmailAndPassword(email, password)) {
-            this.id = custRep.findCustomerByEmailAndPassword(email, password).getId();
+        if (custRep.existsCustomerByEmailAndPassword(email, password))
             return true;
-        } else
-            return false;
+
+        return false;
     }
 
     /**
      * Adds a new purchase to the database
      */
-    public void purchaseCoupon(int couponId) throws ServiceException {
+    public void purchaseCoupon(int id, int couponId) throws ServiceException {
 
         Optional<Coupon> optCoupon = couRep.findById(couponId);
 
@@ -77,7 +60,7 @@ public class CustomerService extends ClientService {
             throw new ServiceException("You already owns this coupon. ");
         }
 
-        Customer customer = getCustomer();
+        Customer customer = getCustomer(id);
 
         coupon.setAmount(coupon.getAmount() - 1);
         customer.addCoupon(coupon);
@@ -88,7 +71,7 @@ public class CustomerService extends ClientService {
     /**
      * @return the coupons of the customer. will return empty list in case of no coupons.
      */
-    public ArrayList<Coupon> getCoupons() {
+    public ArrayList<Coupon> getCoupons(int id) {
 
         ArrayList<Integer> couponsID = new ArrayList<Integer>(couRep.findAllByCustomers(id));
         ArrayList<Coupon> coupons = new ArrayList<Coupon>();
@@ -105,9 +88,9 @@ public class CustomerService extends ClientService {
     /**
      * @return the coupons of the customer that match the given category. will return empty list in case of no coupons.
      */
-    public ArrayList<Coupon> getCouponsByCategory(Coupon.Category category) {
+    public ArrayList<Coupon> getCouponsByCategory(int id, Coupon.Category category) {
 
-        ArrayList<Coupon> coupons = getCoupons();
+        ArrayList<Coupon> coupons = getCoupons(id);
 
         for (int i = 0; i < coupons.size(); i++) {
             if (coupons.get(i).getCategory() != category) {
@@ -121,9 +104,9 @@ public class CustomerService extends ClientService {
     /**
      * @return the coupons of the customer that under maxPrice. will return empty list in case of no coupons.
      */
-    public ArrayList<Coupon> getCouponsByMaxPrice(double maxPrice) {
+    public ArrayList<Coupon> getCouponsByMaxPrice(int id, double maxPrice) {
 
-        ArrayList<Coupon> coupons = getCoupons();
+        ArrayList<Coupon> coupons = getCoupons(id);
 
         for (Coupon coupon : coupons) {
 
@@ -137,18 +120,20 @@ public class CustomerService extends ClientService {
     /**
      * @return all details about this customer from the database.
      */
-    public Customer getCustomerDetails() throws ServiceException {
-
-      return getCustomer();
+    public Customer getCustomerDetails(int id) throws ServiceException {
+        return getCustomer(id);
     }
-    
+
+    public int getCustomerIdFromDB(String email, String password) {
+        return custRep.findCustomerByEmailAndPassword(email, password).getId();
+    }
 
     /**
      * @return the customer as an object using it's id.
      */
-    private Customer getCustomer() throws ServiceException {
+    private Customer getCustomer(int id) throws ServiceException {
 
-        Optional<Customer> opt = custRep.findById(this.id);
+        Optional<Customer> opt = custRep.findById(id);
         if (opt.isEmpty())
             throw new ServiceException("A customer with this id does not exist. ");
         return opt.get();
