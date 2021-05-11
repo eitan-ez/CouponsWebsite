@@ -2,7 +2,8 @@ package app.core.controllers;
 
 import app.core.entities.Company;
 import app.core.entities.Customer;
-import app.core.exceptions.ServiceException;
+import app.core.exceptions.ControllerException;
+import app.core.exceptions.CouponSystemException;
 import app.core.services.AdminService;
 import app.core.utils.JwtGenerate;
 import app.core.utils.JwtGenerate.UserDetails;
@@ -39,22 +40,21 @@ public class AdminController {
 	@PostMapping("/add-company")
 	public void addCompany(@RequestParam String jwt, @RequestBody Company company) throws Exception {
 		try {
-			if (jwtValidation(jwt)) {
-				service.addNewCompany(company);
-				return;
-			}
-			throw new Exception();
-		} catch (ServiceException e) {
-			e.printStackTrace();
-//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+			jwtValidation(jwt);
+			service.addNewCompany(company);
+
+		} catch (CouponSystemException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@PutMapping("/update-company")
 	public void updateCompany(@RequestParam String jwt, @RequestBody Company company) {
 		try {
+			jwtValidation(jwt);
 			service.updateCompany(company.getId(), company);
-		} catch (ServiceException e) {
+
+		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
@@ -62,74 +62,88 @@ public class AdminController {
 	@DeleteMapping("/delete-company")
 	public void deleteCompany(@RequestParam String jwt, @RequestBody int companyId) {
 		try {
+			jwtValidation(jwt);
 			service.deleteCompany(companyId);
-		} catch (ServiceException e) {
+		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@GetMapping("/get-all-companies")
 	public List<Company> getAllCompanies(@RequestParam String jwt) {
-		return service.getAllCompanies();
+		try {
+			jwtValidation(jwt);
+			return service.getAllCompanies();
+		} catch (ControllerException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 	}
 
 	@GetMapping("/get-one-company")
-	public Company getOneCompany(@RequestBody int companyId) {
+	public Company getOneCompany(@RequestParam String jwt, @RequestBody int companyId) {
 		try {
+			jwtValidation(jwt);
 			return service.getOneCompany(companyId);
-		} catch (ServiceException e) {
+		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@PostMapping("/add-customer")
-	public void addCustomer(@RequestBody Customer customer) {
+	public void addCustomer(@RequestParam String jwt, @RequestBody Customer customer) {
 		try {
+			jwtValidation(jwt);
 			service.addNewCustomer(customer);
-		} catch (ServiceException e) {
+		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@PutMapping("/update-customer")
-	public void updateCustomer(@RequestBody Customer customer) {
+	public void updateCustomer(@RequestParam String jwt, @RequestBody Customer customer) {
 		try {
+			jwtValidation(jwt);
 			service.updateCustomer(customer.getId(), customer);
-		} catch (ServiceException e) {
+		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@DeleteMapping("/delete-customer")
-	public void deleteCustomer(@RequestBody int customerId) {
+	public void deleteCustomer(@RequestParam String jwt, @RequestBody int customerId) {
 		try {
+			jwtValidation(jwt);
 			service.deleteCustomer(customerId);
-		} catch (ServiceException e) {
+		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@GetMapping("/get-all-customers")
-	public List getAllCustomers() {
-		return service.getAllCustomers();
-	}
-
-	@GetMapping("/get-one-customer")
-	public Customer getOneCustomer(@RequestBody int customerId) {
+	public List getAllCustomers(@RequestParam String jwt) {
 		try {
-			
-			return service.getOneCustomer(customerId);
-		} catch (ServiceException e) {
+			jwtValidation(jwt);
+			return service.getAllCustomers();
+		} catch (ControllerException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
-	public boolean jwtValidation(String jwt) {
+	@GetMapping("/get-one-customer")
+	public Customer getOneCustomer(@RequestParam String jwt, @RequestBody int customerId) {
+		try {
+			jwtValidation(jwt);
+			return service.getOneCustomer(customerId);
+		} catch (CouponSystemException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	public void jwtValidation(String jwt) throws ControllerException {
 		try {
 			jwtUtil.extractAllClaims(jwt);
-			return true;
 		} catch (ExpiredJwtException e) {
-			return false;
+			throw new ControllerException("You are not logged in. Please log in");
 		}
 
 	}

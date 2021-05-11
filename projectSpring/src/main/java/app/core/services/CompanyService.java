@@ -35,7 +35,7 @@ public class CompanyService extends ClientService {
 
 		Company company = getCompany(companyId);
 
-		if (couRep.existsCouponByTitle(coupon.getTitle()) && coupon.getCompany().getId() == coupon.getCompany().getId())
+		if (couRep.existsCouponByTitle(coupon.getTitle()) && coupon.getCompany().getId() == companyId)
 			throw new ServiceException("A different coupon created by this company already has this title. ");
 
 		if (coupon.getId() != 0)

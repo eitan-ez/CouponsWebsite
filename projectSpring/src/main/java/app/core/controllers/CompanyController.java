@@ -10,6 +10,8 @@ import org.springframework.web.server.ResponseStatusException;
 import app.core.entities.Company;
 import app.core.entities.Coupon;
 import app.core.entities.Coupon.Category;
+import app.core.exceptions.ControllerException;
+import app.core.exceptions.CouponSystemException;
 import app.core.exceptions.ServiceException;
 import app.core.services.CompanyService;
 import app.core.utils.JwtGenerate;
@@ -38,7 +40,7 @@ public class CompanyController {
 		}
 
 		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "login detailes are wrong. please try again");
-		
+
 	}
 
 	@PostMapping("/add")
@@ -46,9 +48,7 @@ public class CompanyController {
 		try {
 			int id = getIdFromJwt(jwt);
 			service.addNewCoupon(coupon, id);
-		} catch (ServiceException e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		} catch (ExpiredJwtException e) {
+		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User aren't logged in. Please log in");
 		}
 	}
@@ -58,7 +58,7 @@ public class CompanyController {
 		try {
 			int id = getIdFromJwt(jwt);
 			return service.updateCoupon(coupon, couponId, id);
-		} catch (ServiceException e) { // in case of exception from our method
+		} catch (CouponSystemException e) { // in case of exception from our method
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
@@ -68,26 +68,41 @@ public class CompanyController {
 		try {
 			int id = getIdFromJwt(jwt);
 			service.deleteCoupon(id, couponId);
-		} catch (ServiceException e) {// in case of exception from our method
+		} catch (CouponSystemException e) {// in case of exception from our method
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@GetMapping("/get-coupons")
 	public List<Coupon> getCompanyCoupons(@RequestParam String jwt) {
-		int id = getIdFromJwt(jwt);
-		return service.getCoupons(id);
+		int id;
+		try {
+			id = getIdFromJwt(jwt);
+			return service.getCoupons(id);
+		} catch (ControllerException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 	}
 
 	@GetMapping("/get-coupons-by-category")
 	public List<Coupon> getCouponsByCategory(@RequestParam String jwt, @RequestBody Category category) {
-		int id = getIdFromJwt(jwt);
+		int id;
+		try {
+			id = getIdFromJwt(jwt);
+		} catch (ControllerException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 		return service.getCouponsByCategory(id, category);
 	}
 
 	@GetMapping("/get-coupons-by-price")
 	public List<Coupon> getCouponsByCategory(@RequestParam String jwt, @RequestBody double maxPrice) {
-		int id = getIdFromJwt(jwt);
+		int id;
+		try {
+			id = getIdFromJwt(jwt);
+		} catch (ControllerException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
 		return service.getCouponsByMaxPrice(id, maxPrice);
 	}
 
@@ -97,17 +112,21 @@ public class CompanyController {
 			int id = getIdFromJwt(jwt);
 
 			return this.service.getCompanyDetails(id);
-		} catch (ServiceException e) {
+		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
-	
-	public int getIdFromJwt(String jwt) {
+
+	/**
+	 * @param jwt - validate the Jwt and
+	 * @return the id as int
+	 * @throws ResponseStatusException
+	 */
+	public int getIdFromJwt(String jwt) throws ControllerException {
 		try {
-			
 			return Integer.parseInt(jwtUtil.extractID(jwt));
 		} catch (ExpiredJwtException e) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User aren't logged in. Please log in");
+			throw new ControllerException("User aren't logged in. Please log in");
 		}
 	}
 
