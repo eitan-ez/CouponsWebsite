@@ -110,7 +110,6 @@ public class CompanyController {
 	public Company getCompanyDetails(@RequestParam String jwt) {
 		try {
 			int id = getIdFromJwt(jwt);
-
 			return this.service.getCompanyDetails(id);
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

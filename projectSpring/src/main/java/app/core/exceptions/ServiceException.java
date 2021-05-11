@@ -2,7 +2,9 @@ package app.core.exceptions;
 
 public class ServiceException extends CouponSystemException {
 
-    public ServiceException() {
+	private static final long serialVersionUID = 1L;
+
+	public ServiceException() {
     }
 
     public ServiceException(String message) {
