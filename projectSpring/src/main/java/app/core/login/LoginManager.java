@@ -20,8 +20,8 @@ public class LoginManager {
 
     @Autowired
     private AdminService adminService;
-    private CompanyService companyService;
-    private CustomerService customerService;
+//    private CompanyService companyService;
+//    private CustomerService customerService;
 
     /**
      * Empty Constructor

@@ -49,8 +49,8 @@ public class CompanyService extends ClientService {
 		if (comRep.existsCompanyByEmailAndPassword(email, password)) {
 			this.id = comRep.findCompanyByEmailAndPassword(email, password).getId();
 			return true;
-		} else
-			return false;
+		}
+		return false;
 	}
 
 	/**
@@ -77,8 +77,8 @@ public class CompanyService extends ClientService {
 	 * Updates the coupon from the database.
 	 * 
 	 * @param Coupon coupon
-	 * @param int id 
-	 * @return 
+	 * @param int    id
+	 * @return
 	 * @throws ServiceException
 	 */
 	public Coupon updateCoupon(Coupon coupon, int id) throws ServiceException {
@@ -88,8 +88,8 @@ public class CompanyService extends ClientService {
 
 		Optional<Coupon> opt = couRep.findById(id);
 		if (opt.isEmpty()) {
-			throw new ServiceException("A coupon with this id does not exist."
-					+ "if you wish to create new coupon use \"addCoupon\"");
+			throw new ServiceException(
+					"A coupon with this id does not exist." + "if you wish to create new coupon use \"addCoupon\"");
 		}
 		Coupon temp = opt.get();
 
