@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -38,11 +37,13 @@ public class AdminController {
 	}
 
 	@PostMapping("/add-company")
-	public void addCompany(@RequestParam String jwt, @RequestBody Company company) {
+	public void addCompany(@RequestParam String jwt, @RequestBody Company company) throws Exception {
 		try {
-			if (jwtValidation(jwt))
+			if (jwtValidation(jwt)) {
 				service.addNewCompany(company);
-			
+				return;
+			}
+			throw new Exception();
 		} catch (ServiceException e) {
 			e.printStackTrace();
 //            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -50,7 +51,7 @@ public class AdminController {
 	}
 
 	@PutMapping("/update-company")
-	public void updateCompany(@RequestBody Company company) {
+	public void updateCompany(@RequestParam String jwt, @RequestBody Company company) {
 		try {
 			service.updateCompany(company.getId(), company);
 		} catch (ServiceException e) {
@@ -59,7 +60,7 @@ public class AdminController {
 	}
 
 	@DeleteMapping("/delete-company")
-	public void deleteCompany(@RequestBody int companyId) {
+	public void deleteCompany(@RequestParam String jwt, @RequestBody int companyId) {
 		try {
 			service.deleteCompany(companyId);
 		} catch (ServiceException e) {
@@ -68,7 +69,7 @@ public class AdminController {
 	}
 
 	@GetMapping("/get-all-companies")
-	public List<Company> getAllCompanies() {
+	public List<Company> getAllCompanies(@RequestParam String jwt) {
 		return service.getAllCompanies();
 	}
 

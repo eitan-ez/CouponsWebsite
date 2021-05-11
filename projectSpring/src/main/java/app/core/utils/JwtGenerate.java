@@ -29,17 +29,18 @@ public class JwtGenerate {
 
 		public String generateToken(UserDetails userDetails) {
 			Map<String, Object> claims = new HashMap<>();
-			claims.put("userId", userDetails.id);
+			claims.put("email", userDetails.email);
 			claims.put("userType", userDetails.userType);
-			return createToken(claims, userDetails.email);
+			return createToken(claims, userDetails.id);
 		}
 
 		private String createToken(Map<String, Object> claims, String subject) {
 
 			Instant now = Instant.now();
 
-			return Jwts.builder().setClaims(claims)
+			return Jwts.builder()
 
+					.setClaims(claims)
 					.setSubject(subject)
 					.setIssuedAt(Date.from(now))
 					.setExpiration(Date.from(now.plus(10, ChronoUnit.HOURS)))
@@ -52,8 +53,8 @@ public class JwtGenerate {
 			return jwtParser.parseClaimsJws(token).getBody();
 		}
 
-		/** returns the JWT subject - in our case the email address */
-		public String extractUsername(String token) {
+		/** returns the JWT subject - in our case the id */
+		public String extractID(String token) {
 			return extractAllClaims(token).getSubject();
 		}
 
@@ -71,11 +72,11 @@ public class JwtGenerate {
 		}
 
 		/**
-		 * returns true if the user (email) in the specified token equals the one in the
+		 * returns true if the user (id) in the specified token equals the one in the
 		 * specified user details and the token is not expired
 		 */
 		public boolean validateToken(String token, UserDetails userDetails) {
-			final String username = extractUsername(token);
+			final String username = extractID(token);
 			return (username.equals(userDetails.email) && !isTokenExpired(token));
 		}
 

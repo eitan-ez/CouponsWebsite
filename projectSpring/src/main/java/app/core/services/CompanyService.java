@@ -1,6 +1,5 @@
 package app.core.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,52 +17,25 @@ import app.core.entities.Coupon;
 @Scope("prototype")
 public class CompanyService extends ClientService {
 
-	private int id;
-
-	/**
-	 * Init Constructor
-	 */
-	public CompanyService(int id) {
-		this.id = id;
-	}
-
-	/**
-	 * An empty constructor
-	 */
-	public CompanyService() {
-	}
-
-	/**
-	 * Sets the company's id.
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	/**
 	 * Logs in a company user.
 	 */
 	@Override
 	public boolean login(String email, String password) {
-
-		if (comRep.existsCompanyByEmailAndPassword(email, password)) {
-			this.id = comRep.findCompanyByEmailAndPassword(email, password).getId();
-			return true;
-		}
-		return false;
+		return comRep.existsCompanyByEmailAndPassword(email, password);
 	}
 
 	/**
 	 * Adds a new company to the database.
 	 */
-	public void addNewCoupon(Coupon coupon) throws ServiceException {
+	public void addNewCoupon(Coupon coupon, int companyId) throws ServiceException {
 
 		if (isCouponNullCheck(coupon))
 			throw new ServiceException("Some details are missing, please try again. ");
 
-		Company company = getCompany();
+		Company company = getCompany(companyId);
 
-		if (couRep.existsCouponByTitle(coupon.getTitle()) && id == coupon.getCompany().getId())
+		if (couRep.existsCouponByTitle(coupon.getTitle()) && coupon.getCompany().getId() == coupon.getCompany().getId())
 			throw new ServiceException("A different coupon created by this company already has this title. ");
 
 		if (coupon.getId() != 0)
@@ -81,12 +53,12 @@ public class CompanyService extends ClientService {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public Coupon updateCoupon(Coupon coupon, int id) throws ServiceException {
+	public Coupon updateCoupon(Coupon coupon, int couponId, int companyId) throws ServiceException {
 
 		if (isCouponNullCheck(coupon))
 			throw new ServiceException("Some details are missing, please try again. ");
 
-		Optional<Coupon> opt = couRep.findById(id);
+		Optional<Coupon> opt = couRep.findById(couponId);
 		if (opt.isEmpty()) {
 			throw new ServiceException(
 					"A coupon with this id does not exist." + "if you wish to create new coupon use \"addCoupon\"");
@@ -94,7 +66,7 @@ public class CompanyService extends ClientService {
 		Coupon temp = opt.get();
 
 		// make sure to avoid nullPointer in case of tempering with the DB
-		if (coupon.getCompany() == null || coupon.getCompany().getId() != this.id)
+		if (coupon.getCompany() == null || coupon.getCompany().getId() != companyId)
 			throw new ServiceException("The coupon's registered company must be yours. ");
 
 		temp.setTitle(coupon.getTitle());
@@ -113,14 +85,14 @@ public class CompanyService extends ClientService {
 	/**
 	 * Deletes a coupon from the database.
 	 */
-	public void deleteCoupon(int couponId) throws ServiceException {
+	public void deleteCoupon(int couponId, int companyId) throws ServiceException {
 
 		Optional<Coupon> opt = couRep.findById(couponId);
 		if (opt.isEmpty())
 			throw new ServiceException("A company with this id does not exist. ");
 		Coupon coupon = opt.get();
 		// to avoid nullPointer in case of tempering with the DB
-		if ((coupon.getCompany() == null || coupon.getCompany().getId() != this.id))
+		if ((coupon.getCompany() == null || coupon.getCompany().getId() != companyId))
 			throw new ServiceException("you can't delete coupon that not yours");
 
 		couRep.deleteById(couponId);
@@ -130,41 +102,50 @@ public class CompanyService extends ClientService {
 	/**
 	 * Gets all coupons of this company from the database.
 	 */
-	public List<Coupon> getCoupons() {
-		return couRep.findAllByCompanyId(this.id);
+	public List<Coupon> getCoupons(int companyId) {
+		return couRep.findAllByCompanyId(companyId);
 	}
 
 	/**
 	 * Gets all coupons by this company with a category filter from the database.
 	 */
-	public List<Coupon> getCouponsByCategory(Coupon.Category category) {
-		return couRep.findAllByCompanyAndCategoryId(this.id, category);
+	public List<Coupon> getCouponsByCategory(int companyId, Coupon.Category category) {
+		return couRep.findAllByCompanyAndCategoryId(companyId, category);
 	}
 
 	/**
 	 * Gets all coupons by this company with a maxPrice filter from the database.
 	 */
-	public List<Coupon> getCouponsByMaxPrice(double maxPrice) {
-		return couRep.findAllByCompanyIdAndMaxPrice(this.id, maxPrice);
+	public List<Coupon> getCouponsByMaxPrice(int companyId, double maxPrice) {
+		return couRep.findAllByCompanyIdAndMaxPrice(companyId, maxPrice);
 	}
 
 	/**
 	 * Gets all details about this company from the database.
 	 */
-	public Company getCompanyDetails() throws ServiceException {
+	public Company getCompanyDetails(int companyId) throws ServiceException {
 
-		Optional<Company> opt = comRep.findById(id);
+		Optional<Company> opt = comRep.findById(companyId);
 		if (opt.isEmpty())
 			throw new ServiceException("A company with this id does not exist. ");
 		return opt.get();
+	}
+	
+	/**
+	 * @param email
+	 * @param password
+	 * @return the id of the company from the DB. use only when you know company exist
+	 */
+	public int getCompanyIdFromDB(String email, String password) {
+		return comRep.findCompanyByEmailAndPassword(email, password).getId();
 	}
 
 	/**
 	 * @return the company as an object using it's id.
 	 */
-	private Company getCompany() throws ServiceException {
+	private Company getCompany(int companyId) throws ServiceException {
 
-		Optional<Company> opt = comRep.findById(id);
+		Optional<Company> opt = comRep.findById(companyId);
 		if (opt.isEmpty())
 			throw new ServiceException("A company with this id does not exist. ");
 		return opt.get();

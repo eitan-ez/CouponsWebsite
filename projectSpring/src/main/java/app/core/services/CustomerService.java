@@ -141,6 +141,7 @@ public class CustomerService extends ClientService {
 
       return getCustomer();
     }
+    
 
     /**
      * @return the customer as an object using it's id.
