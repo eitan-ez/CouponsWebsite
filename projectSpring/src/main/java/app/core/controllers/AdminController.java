@@ -120,7 +120,7 @@ public class AdminController {
 	}
 
 	@GetMapping("/get-all-customers")
-	public List getAllCustomers(@RequestParam String jwt) {
+	public List<Customer> getAllCustomers(@RequestParam String jwt) {
 		try {
 			jwtValidation(jwt);
 			return service.getAllCustomers();

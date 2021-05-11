@@ -12,7 +12,6 @@ import app.core.entities.Coupon;
 import app.core.entities.Coupon.Category;
 import app.core.exceptions.ControllerException;
 import app.core.exceptions.CouponSystemException;
-import app.core.exceptions.ServiceException;
 import app.core.services.CompanyService;
 import app.core.utils.JwtGenerate;
 import app.core.utils.JwtGenerate.UserDetails;
