@@ -30,7 +30,7 @@ public class AdminController {
 	public String login(String email, String password) {
 		if (service.login(email, password)) {
 			UserDetails userDetails = new UserDetails("0", email, password, UserType.ADMIN);
-			return jwtUtil.generateToken(userDetails);
+			String token =  jwtUtil.generateToken(userDetails);
 		}
 
 //        	TODO
