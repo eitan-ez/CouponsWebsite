@@ -85,6 +85,7 @@ public class JwtGenerate {
 			public String email;
 			public String password;
 			public UserType userType;
+			public String token;
 
 			public UserDetails(String id, String email, String password, UserType userType) {
 				super();
