@@ -31,6 +31,8 @@ public class AdminController {
 		if (service.login(email, password)) {
 			UserDetails userDetails = new UserDetails("0", email, password, UserType.ADMIN);
 			String token =  jwtUtil.generateToken(userDetails);
+			userDetails.token = token;
+			return token;
 		}
 
 //        	TODO
