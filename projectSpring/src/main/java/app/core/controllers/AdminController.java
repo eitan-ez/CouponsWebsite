@@ -36,9 +36,8 @@ public class AdminController {
 			user.token = token;
 			return user;
 		}
-
-//        	TODO
-		return null;
+		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "login details incorrect");
+		
 	}
 
 	@PostMapping("/add-company")
@@ -46,8 +45,8 @@ public class AdminController {
 		try {
 			jwtValidation(jwt);
 			service.addNewCompany(company);
-
 		} catch (CouponSystemException e) {
+
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
