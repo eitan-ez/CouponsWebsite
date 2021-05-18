@@ -12,6 +12,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.stereotype.Service;
 
+import app.core.utils.JwtGenerate.UserDetails.UserType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;
@@ -99,6 +100,13 @@ public class JwtGenerate {
 				ADMIN, COMPANY, CUSTOMER
 			}
 
+		}
+		
+		public static class CredntialsDetails {
+			public String email;
+			public String password;
+			public UserType userType;
+			
 		}
 		
 	}

@@ -18,6 +18,7 @@ import app.core.utils.JwtGenerate.UserDetails;
 import app.core.utils.JwtGenerate.UserDetails.UserType;
 import io.jsonwebtoken.ExpiredJwtException;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/company")
 public class CompanyController {

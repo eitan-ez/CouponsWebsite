@@ -5,7 +5,6 @@ import app.core.entities.Coupon.Category;
 import app.core.entities.Customer;
 import app.core.exceptions.ControllerException;
 import app.core.exceptions.CouponSystemException;
-import app.core.exceptions.ServiceException;
 import app.core.services.CustomerService;
 
 import java.util.List;
@@ -16,8 +15,15 @@ import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/customer")
 public class CustomerController {

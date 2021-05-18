@@ -6,6 +6,7 @@ import app.core.exceptions.ControllerException;
 import app.core.exceptions.CouponSystemException;
 import app.core.services.AdminService;
 import app.core.utils.JwtGenerate;
+import app.core.utils.JwtGenerate.CredntialsDetails;
 import app.core.utils.JwtGenerate.UserDetails;
 import app.core.utils.JwtGenerate.UserDetails.UserType;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -17,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
@@ -26,13 +28,13 @@ public class AdminController {
 	@Autowired
 	private JwtGenerate jwtUtil;
 
-	@GetMapping("/login")
-	public String login(String email, String password) {
-		if (service.login(email, password)) {
-			UserDetails userDetails = new UserDetails("0", email, password, UserType.ADMIN);
-			String token =  jwtUtil.generateToken(userDetails);
-			userDetails.token = token;
-			return token;
+	@PostMapping("/login")
+	public UserDetails login(@RequestBody CredntialsDetails credntialsDetails) {
+		if (service.login(credntialsDetails.email, credntialsDetails.password)) {
+			UserDetails user = new UserDetails("0", credntialsDetails.email, credntialsDetails.password, UserType.ADMIN);
+			String token =  jwtUtil.generateToken(user);
+			user.token = token;
+			return user;
 		}
 
 //        	TODO
