@@ -96,7 +96,7 @@ public class CompanyController {
 	}
 
 	@GetMapping("/get-coupons-by-price")
-	public List<Coupon> getCouponsByCategory(@RequestParam String jwt, @RequestBody double maxPrice) {
+	public List<Coupon> getCouponsByMaxPrice(@RequestParam String jwt, @RequestBody double maxPrice) {
 		int id;
 		try {
 			id = getIdFromJwt(jwt);
