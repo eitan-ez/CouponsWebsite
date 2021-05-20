@@ -48,6 +48,7 @@ public class AdminService extends ClientService {
         if (company.getId() != 0)
             throw new ServiceException("Company id must be left empty. ");
 
+        System.out.println(company);
         return comRep.save(company);
     }
 
