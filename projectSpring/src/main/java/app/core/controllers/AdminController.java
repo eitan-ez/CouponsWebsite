@@ -10,22 +10,15 @@ import app.core.utils.JwtGenerate.CredntialsDetails;
 import app.core.utils.JwtGenerate.UserDetails;
 import app.core.utils.JwtGenerate.UserDetails.UserType;
 import io.jsonwebtoken.ExpiredJwtException;
-import springfox.documentation.spring.web.json.Json;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.web.JsonPath;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 
 import java.util.List;
 
-import javax.websocket.server.PathParam;
 
 @CrossOrigin
 @RestController
