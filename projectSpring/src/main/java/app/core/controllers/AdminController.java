@@ -67,7 +67,7 @@ public class AdminController {
 	}
 
 	@DeleteMapping("/delete-company/{id}")
-	public void deleteCompany(@RequestHeader String jwt,@PathVariable int id) {
+	public void deleteCompany(@RequestHeader String jwt, @PathVariable int id) {
 		try {
 			jwtValidation(jwt);
 			service.deleteCompany(id);
@@ -116,11 +116,11 @@ public class AdminController {
 		}
 	}
 
-	@DeleteMapping("/delete-customer")
-	public void deleteCustomer(@RequestHeader String jwt, @RequestBody int customerId) {
+	@DeleteMapping("/delete-customer/{id}")
+	public void deleteCustomer(@RequestHeader String jwt, @PathVariable int id) {
 		try {
 			jwtValidation(jwt);
-			service.deleteCustomer(customerId);
+			service.deleteCustomer(id);
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
