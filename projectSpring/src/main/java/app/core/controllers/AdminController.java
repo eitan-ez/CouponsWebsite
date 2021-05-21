@@ -86,11 +86,11 @@ public class AdminController {
 		}
 	}
 
-	@GetMapping("/get-one-company")
-	public Company getOneCompany(@RequestHeader String jwt, @RequestBody int companyId) {
+	@GetMapping("/get-one-company/{id}")
+	public Company getOneCompany(@RequestHeader String jwt, @PathVariable int id) {
 		try {
 			jwtValidation(jwt);
-			return service.getOneCompany(companyId);
+			return service.getOneCompany(id);
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
@@ -136,11 +136,11 @@ public class AdminController {
 		}
 	}
 
-	@GetMapping("/get-one-customer")
-	public Customer getOneCustomer(@RequestHeader String jwt, @RequestBody int customerId) {
+	@GetMapping("/get-one-customer/{id}")
+	public Customer getOneCustomer(@RequestHeader String jwt, @PathVariable int id) {
 		try {
 			jwtValidation(jwt);
-			return service.getOneCustomer(customerId);
+			return service.getOneCustomer(id);
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
