@@ -14,6 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "coupons")
 public class Coupon {
@@ -23,6 +25,7 @@ public class Coupon {
 	private int id;
 	@ManyToOne
 	@JoinColumn
+	@JsonIgnore
 	private Company company;
 	private int amount;
 	private String title, description, image;

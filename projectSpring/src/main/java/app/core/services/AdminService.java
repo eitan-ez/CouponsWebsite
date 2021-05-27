@@ -89,7 +89,7 @@ public class AdminService extends ClientService {
 
         Optional<Company> opt = comRep.findById(companyId);
         if (opt.isEmpty())
-            throw new ServiceException("A company with that id does not exists. ");
+            throw new ServiceException("A company with id "+ companyId + " does not exists. ");
         Company company = opt.get();
         couRep.deleteByCompany(company);
         comRep.deleteById(companyId);

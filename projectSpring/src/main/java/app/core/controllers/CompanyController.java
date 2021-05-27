@@ -14,6 +14,7 @@ import app.core.exceptions.ControllerException;
 import app.core.exceptions.CouponSystemException;
 import app.core.services.CompanyService;
 import app.core.utils.JwtGenerate;
+import app.core.utils.JwtGenerate.CredntialsDetails;
 import app.core.utils.JwtGenerate.UserDetails;
 import app.core.utils.JwtGenerate.UserDetails.UserType;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -28,15 +29,14 @@ public class CompanyController {
 	@Autowired
 	private JwtGenerate jwtUtil;
 
-	public CompanyController() {
-	}
-
-	@GetMapping("/login")
-	public String login(String email, String password) throws ResponseStatusException {
-		if (service.login(email, password)) {
-			String id = String.valueOf(service.getCompanyIdFromDB(email, password));
-			UserDetails userDetails = new UserDetails(id, email, password, UserType.COMPANY);
-			return jwtUtil.generateToken(userDetails);
+	@PostMapping("/login")
+	public UserDetails login(@RequestBody CredntialsDetails credntialsDetails) {
+		System.out.println(credntialsDetails.email + "," + credntialsDetails.password);
+		if (service.login(credntialsDetails.email, credntialsDetails.password)) {
+			String id = String.valueOf(service.getCompanyIdFromDB(credntialsDetails.email, credntialsDetails.password));
+			UserDetails user = new UserDetails(id, credntialsDetails.email, credntialsDetails.password, UserType.COMPANY);
+			user.token = jwtUtil.generateToken(user);
+			return user;
 		}
 
 		throw new ResponseStatusException(HttpStatus.FORBIDDEN, "login detailes are wrong. please try again");
