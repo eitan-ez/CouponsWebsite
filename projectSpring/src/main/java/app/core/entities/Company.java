@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "companies")
 public class Company {
@@ -19,7 +21,8 @@ public class Company {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String name, email, password;
-
+	
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "company")
 	private List<Coupon> coupons;
 	

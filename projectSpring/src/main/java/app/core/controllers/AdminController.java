@@ -10,6 +10,7 @@ import app.core.utils.JwtGenerate.CredntialsDetails;
 import app.core.utils.JwtGenerate.UserDetails;
 import app.core.utils.JwtGenerate.UserDetails.UserType;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -149,7 +150,8 @@ public class AdminController {
 	public void jwtValidation(String jwt) throws ControllerException {
 		try {
 			jwtUtil.extractAllClaims(jwt);
-		} catch (ExpiredJwtException e) {
+			
+		} catch (JwtException e) {
 			throw new ControllerException("You are not logged in. Please log in");
 		}
 

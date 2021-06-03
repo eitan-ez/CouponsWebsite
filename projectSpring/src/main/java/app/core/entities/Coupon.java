@@ -1,6 +1,6 @@
 package app.core.entities;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +14,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "coupons")
@@ -25,11 +24,10 @@ public class Coupon {
 	private int id;
 	@ManyToOne
 	@JoinColumn
-	@JsonIgnore
 	private Company company;
 	private int amount;
 	private String title, description, image;
-	private LocalDateTime startDate, endDate;
+	private LocalDate startDate, endDate;
 	private double price;
 	@ManyToMany (mappedBy = "coupons", cascade = CascadeType.REMOVE)
 	private List<Customer> customers = new ArrayList<Customer>();
@@ -54,8 +52,8 @@ public class Coupon {
 	 * @param price
 	 * @param category
 	 */
-	public Coupon(int id, Company company, int amount, String title,String description, String image, LocalDateTime startDate,
-			LocalDateTime endDate, double price, Category category) {
+	public Coupon(int id, Company company, int amount, String title,String description, String image, LocalDate startDate,
+			LocalDate endDate, double price, Category category) {
 		this.id = id;
 		this.company = company;
 		this.amount = amount;
@@ -107,11 +105,11 @@ public class Coupon {
 		this.image = image;
 	}
 
-	public void setStartDate(LocalDateTime startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 
-	public void setEndDate(LocalDateTime endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 
@@ -139,11 +137,11 @@ public class Coupon {
 		return image;
 	}
 
-	public LocalDateTime getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
-	public LocalDateTime getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 

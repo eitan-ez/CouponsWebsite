@@ -26,8 +26,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Integer> {
     @Query(value = "SELECT * FROM `coupons` WHERE `company_id` = :id", nativeQuery = true)
     List<Coupon> findAllByCompanyId(int id);
 
-    @Query(value = "SELECT * FROM `coupons` WHERE `company_id` = :id AND `category` = :category", nativeQuery = true)
-    List<Coupon> findAllByCompanyAndCategoryId(int id, Coupon.Category category);
+    List<Coupon> findAllByCompanyIdAndCategory(int companyId, Coupon.Category category);
 
 
     @Query(value = "SELECT * FROM `coupons` WHERE `company_id` = :id AND `price` <= :maxPrice", nativeQuery = true)

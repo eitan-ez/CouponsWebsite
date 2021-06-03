@@ -31,10 +31,10 @@ public class CompanyController {
 
 	@PostMapping("/login")
 	public UserDetails login(@RequestBody CredntialsDetails credntialsDetails) {
-		System.out.println(credntialsDetails.email + "," + credntialsDetails.password);
 		if (service.login(credntialsDetails.email, credntialsDetails.password)) {
 			String id = String.valueOf(service.getCompanyIdFromDB(credntialsDetails.email, credntialsDetails.password));
-			UserDetails user = new UserDetails(id, credntialsDetails.email, credntialsDetails.password, UserType.COMPANY);
+			UserDetails user = new UserDetails(id, credntialsDetails.email, credntialsDetails.password,
+					UserType.COMPANY);
 			user.token = jwtUtil.generateToken(user);
 			return user;
 		}
@@ -44,70 +44,69 @@ public class CompanyController {
 	}
 
 	@PostMapping("/add")
-	public void addCoupon(@RequestParam String jwt, @RequestBody Coupon coupon) {
+	public void addCoupon(@RequestHeader String jwt, @RequestBody Coupon coupon) {
 		try {
 			int id = getIdFromJwt(jwt);
 			service.addNewCoupon(coupon, id);
 		} catch (CouponSystemException e) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User aren't logged in. Please log in");
-		}
-	}
-
-	@PutMapping("/update")
-	public Coupon updateCoupon(@RequestParam String jwt, @RequestBody Coupon coupon, @RequestBody int couponId) {
-		try {
-			int id = getIdFromJwt(jwt);
-			return service.updateCoupon(coupon, couponId, id);
-		} catch (CouponSystemException e) { // in case of exception from our method
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
-	@DeleteMapping("/delete")
-	public void deleteCoupon(@RequestParam String jwt, @RequestBody int couponId) {
+	@PutMapping("/update")
+	public Coupon updateCoupon(@RequestHeader String jwt, @RequestBody Coupon coupon) {
+		try {
+			int companyId = getIdFromJwt(jwt);
+			return service.updateCoupon(coupon, coupon.getId(), companyId);
+		} catch (CouponSystemException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@DeleteMapping("/delete/{couponId}")
+	public void deleteCoupon(@RequestHeader String jwt, @PathVariable int couponId) {
 		try {
 			int id = getIdFromJwt(jwt);
 			service.deleteCoupon(id, couponId);
-		} catch (CouponSystemException e) {// in case of exception from our method
+		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@GetMapping("/get-coupons")
-	public List<Coupon> getCompanyCoupons(@RequestParam String jwt) {
+	public List<Coupon> getCompanyCoupons(@RequestHeader String jwt) {
 		int id;
 		try {
 			id = getIdFromJwt(jwt);
 			return service.getCoupons(id);
-		} catch (ControllerException e) {
+		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
-	@GetMapping("/get-coupons-by-category")
-	public List<Coupon> getCouponsByCategory(@RequestParam String jwt, @RequestBody Category category) {
-		int id;
+	@GetMapping("/get-coupons-by-category/{category}")
+	public List<Coupon> getCouponsByCategory(@RequestHeader String jwt, @PathVariable Category category) {
 		try {
-			id = getIdFromJwt(jwt);
-		} catch (ControllerException e) {
+			int id = getIdFromJwt(jwt);
+			return service.getCouponsByCategory(id, category);
+		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
-		return service.getCouponsByCategory(id, category);
 	}
 
-	@GetMapping("/get-coupons-by-price")
-	public List<Coupon> getCouponsByMaxPrice(@RequestParam String jwt, @RequestBody double maxPrice) {
-		int id;
+	@GetMapping("/get-coupons-by-price/{maxPrice}")
+	public List<Coupon> getCouponsByMaxPrice(@RequestHeader String jwt, @PathVariable String maxPrice) {
 		try {
-			id = getIdFromJwt(jwt);
-		} catch (ControllerException e) {
+			int id = getIdFromJwt(jwt);
+			double price = Double.parseDouble(maxPrice);
+			return service.getCouponsByMaxPrice(id, price);
+		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
-		return service.getCouponsByMaxPrice(id, maxPrice);
 	}
 
 	@GetMapping("/company")
-	public Company getCompanyDetails(@RequestParam String jwt) {
+	public Company getCompanyDetails(@RequestHeader String jwt) {
 		try {
 			int id = getIdFromJwt(jwt);
 			return this.service.getCompanyDetails(id);

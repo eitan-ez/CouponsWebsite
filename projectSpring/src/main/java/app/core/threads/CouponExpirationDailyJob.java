@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,7 +51,7 @@ public class CouponExpirationDailyJob implements Runnable {
             } catch (NullPointerException e) {
 
             }
-            LocalDateTime now = LocalDateTime.now();
+            LocalDate now = LocalDate.now();
 
             try {
 

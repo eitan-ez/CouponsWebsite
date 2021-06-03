@@ -1,6 +1,6 @@
 package app.core.services;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -54,7 +54,7 @@ public class CustomerService extends ClientService {
 			throw new ServiceException("The coupon you are trying to buy has run out of stock. ");
 		}
 
-		if (coupon.getEndDate().isBefore(LocalDateTime.now())) {
+		if (coupon.getEndDate().isBefore(LocalDate.now())) {
 			throw new ServiceException("The coupon you are trying to buy has expired. ");
 		}
 

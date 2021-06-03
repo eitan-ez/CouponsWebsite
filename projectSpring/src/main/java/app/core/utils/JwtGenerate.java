@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import app.core.utils.JwtGenerate.UserDetails.UserType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -49,7 +50,7 @@ public class JwtGenerate {
 					.compact();
 		}
 
-		public Claims extractAllClaims(String token) throws ExpiredJwtException {
+		public Claims extractAllClaims(String token) throws JwtException {
 			JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(this.decodedSecretKey).build();
 			return jwtParser.parseClaimsJws(token).getBody();
 		}
@@ -59,7 +60,7 @@ public class JwtGenerate {
 			return extractAllClaims(token).getSubject();
 		}
 
-		public Date extractExpiration(String token) {
+		public Date extractExpiration(String token) { 
 			return extractAllClaims(token).getExpiration();
 		}
 
